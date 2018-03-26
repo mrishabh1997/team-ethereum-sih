@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>  
+    <script type="text/javascript">
+    var x=0;
+    var dps = [];
+    window.onload = function () {
+		var chart = new CanvasJS.Chart("chartContainer",
+		{
+            backgroundColor: "#000000",
+			title:{
+				text: "Students Engagement in Video",
+                fontColor: "white"
+			},  
+                        animationEnabled: true,  
+			axisY: {
+				title: "Engagement Level",
+				//valueFormatString: "#0,,.",
+				suffix: " "
+			},
+			data: [
+			{        
+				toolTipContent: "{y} units",
+				type: "splineArea",
+				markerSize: 5,
+				color: "#AC497F",
+                dataPoints:dps
+        }]
+    });
+
+chart.render();
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+<script type="text/javascript">
+var config = {
+  apiKey: "AIzaSyAbEvVDqojZxxiHY7tijKhj__ml5a7mdEk",
+    authDomain: "hack-d622e.firebaseapp.com",
+    databaseURL: "https://hack-d622e.firebaseio.com",
+    projectId: "hack-d622e",
+    storageBucket: "",
+    messagingSenderId: "834161010109"
+};
+firebase.initializeApp(config);
+var ref = firebase.database().ref('/emotions');
+ref.once('value', function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    var childKey = childSnapshot.val();
+    
+    var val = {x:x,y:childKey.engagement}
+    dps.push(val);
+    x++;
+    
+
+    //console.log(childKey);
+  });
+});
+
+
+
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body style="height:100%;width:100%;background:black">
+	<div id="chartContainer" style="margin-top:50px;height: 500px; width: 100%; position:center">
+	</div>
+</body>
+
+</html>
